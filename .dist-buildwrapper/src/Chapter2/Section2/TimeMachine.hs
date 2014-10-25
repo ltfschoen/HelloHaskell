@@ -14,13 +14,21 @@ module Chapter2.Section2.TimeMachine where
   data Person = Person String String
               deriving Show
   
-  {- Company name Function -}
-  {- Pattern matching across some cases. Test input 'companyName (GovOrg "NATO")' -}
-  companyName :: Client -> Maybe String
-  companyName client = case client of 
-                        GovOrg  name       -> Just name
-                        Company name _ _ _ -> Just name
-                        _                  -> Nothing
+  {- Client name Function -}
+  {- Pattern matching across some cases. Test input 'clientName (GovOrg "NATO")' -}
+  {-
+  clientName :: Client -> String
+  clientName client = case client of 
+                        GovOrg  name       -> name
+                        Company name _ _ _ -> name
+                        Individual (Person fName lName) _ -> fName ++ " " ++ lName
+  -}
+
+  {- Alternatively Encode Pattern Matching directly in the definition -}
+  clientName (GovOrg name)                              = name
+  clientName (Company name _ _ _)                       = name
+  clientName (Individual (Person fName lName) _)        = fName ++ " " ++ lName
+
 {-
   {- Test example: f (Company "A" 5 (Person "John" "Brown" Male) "Director") -}
   f :: Client -> String
