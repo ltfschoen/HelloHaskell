@@ -41,3 +41,11 @@ module Chapter2.Section2.TimeMachine where
                  case pos of "Boss" -> name ++ " is the boss"
                _                    -> "No boss exists"
 -}
+
+{- Pattern Matching on List to check whether data is sorted -}
+  sorted :: [Integer] -> Bool
+  sorted []               = True                {- Empty case -}
+  sorted [_]              = True                {- Singleton case -}
+  {- As Patterns binds value in match and match its inner components when Multiple elements in list. -}
+  {- Compare fst and snd then recursively check if snd and remaining are sorted -} 
+  sorted (x : r@(y:_))    = x < y && sorted r   
