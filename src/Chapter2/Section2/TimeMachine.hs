@@ -15,8 +15,9 @@ module Chapter2.Section2.TimeMachine where
               deriving Show
   
   {- Client name Function -}
-  {- Pattern matching across some cases -}
-  clientName :: Client -> String
+  {- Pattern matching across some cases. Test input 'clientName (GovOrg "NATO")' -}
+  clientName :: Client -> Maybe String
   clientName client = case client of 
-                        GovOrg  name       -> name
-                        Company name _ _ _ -> name
+                        GovOrg  name       -> Just name
+                        Company name _ _ _ -> Just name
+                        _                  -> Nothing
