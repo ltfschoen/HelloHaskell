@@ -1,3 +1,4 @@
+{-# LANGUAGE ViewPatterns #-}
 module Chapter2.Section2.TimeMachine where
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
@@ -49,3 +50,12 @@ module Chapter2.Section2.TimeMachine where
   {- As Patterns binds value in match and match its inner components when Multiple elements in list. -}
   {- Compare fst and snd then recursively check if snd and remaining are sorted -} 
   sorted (x : r@(y:_))    = x < y && sorted r   
+
+  responsibility :: Client -> String
+  responsibility (Company _ _ _ r) = r
+  responsibility _                 = "Unknown"
+  
+  specialClient :: Client -> Bool
+  specialClient (clientName -> "Mr Schoen")    = True
+  specialClient (responsibility -> "Director") = True
+  specialClient _                              = False
