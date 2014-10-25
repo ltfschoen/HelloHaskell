@@ -13,3 +13,10 @@ module Chapter2.Section2.TimeMachine where
               deriving Show
   data Person = Person String String
               deriving Show
+  
+  {- Client name Function -}
+  {- Pattern matching across some cases -}
+  clientName :: Client -> String
+  clientName client = case client of 
+                        GovOrg  name       -> name
+                        Company name _ _ _ -> name
