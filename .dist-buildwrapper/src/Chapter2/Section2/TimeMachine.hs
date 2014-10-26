@@ -1,5 +1,8 @@
+{- GHC Extension pragmas -}
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RecordWildCards #-}
+
 module Chapter2.Section2.TimeMachine where
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
@@ -58,10 +61,19 @@ module Chapter2.Section2.TimeMachine where
   {- Record Puns GHC Extension used as alternative for Record Matching 
      Note that pragma 'NamedFieldPuns' required 
   -}
+  {-
   greet :: ClientR -> String 
   greet IndividualR { person = PersonR { firstName } } = "Hi " ++ firstName
   greet CompanyR    { clientRName }                    = "Good Day " ++ clientRName
   greet GovOrgR     { }                                = "Welcome"
+  -}
+  
+  {- RecordWildCards GHC Extension used to automatically create bindings for all variables
+     not yet mentioned in the pattern
+  -}
+  greet IndividualR { person = PersonR { .. } } = "Hi " ++ firstName
+  greet CompanyR    { .. }                      = "Good Day " ++ clientRName
+  greet GovOrgR     { }                         = "Welcome"
 
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
