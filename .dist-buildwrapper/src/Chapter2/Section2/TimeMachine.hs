@@ -25,6 +25,20 @@ module Chapter2.Section2.TimeMachine where
                         Individual (Person fName lName) _ -> fName ++ " " ++ lName
   -}
 
+  {- Records with set of Fields for access and updating part of the Data Structure
+     are defined using the Data Declaration -}
+  data ClientR = GovOrgR  { clientRName :: String }
+               | CompanyR { clientRName :: String
+                          , companyId :: Integer
+                          , person :: PersonR
+                          , duty :: String }
+               | IndividualR { person :: PersonR }
+               deriving Show
+               
+  data PersonR = PersonR { firstName :: String
+                         , lastName :: String
+                         } deriving Show
+
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
   clientName (Company name _ _ _)                       = name
