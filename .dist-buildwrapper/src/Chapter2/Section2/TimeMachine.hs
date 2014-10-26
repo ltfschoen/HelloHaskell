@@ -1,4 +1,5 @@
 {-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE NamedFieldPuns #-}
 module Chapter2.Section2.TimeMachine where
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
@@ -47,10 +48,20 @@ module Chapter2.Section2.TimeMachine where
   {- Records for fields to bind or match with new pattern (constructor) 
      and list of fields and patterns 
   -}
+  {-
   greet :: ClientR -> String
   greet IndividualR { person = PersonR { firstName = fn } } = "Hi " ++ fn
   greet CompanyR    { clientRName = c }                     = "Good Day " ++ c
   greet GovOrgR     { }                                     = "Welcome" -- empty list of fields
+  -}
+
+  {- Record Puns GHC Extension used as alternative for Record Matching 
+     Note that pragma 'NamedFieldPuns' required 
+  -}
+  greet :: ClientR -> String 
+  greet IndividualR { person = PersonR { firstName } } = "Hi " ++ firstName
+  greet CompanyR    { clientRName }                    = "Good Day " ++ clientRName
+  greet GovOrgR     { }                                = "Welcome"
 
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
