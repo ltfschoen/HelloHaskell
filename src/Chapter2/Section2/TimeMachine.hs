@@ -1,4 +1,8 @@
+{- GHC Extension pragmas -}
 {-# LANGUAGE ViewPatterns #-}
+{-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE RecordWildCards #-}
+
 module Chapter2.Section2.TimeMachine where
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
@@ -26,7 +30,12 @@ module Chapter2.Section2.TimeMachine where
   -}
 
   {- Records with set of Fields for access and updating part of the Data Structure
-     are defined using the Data Declaration -}
+     are defined using the Data Declaration. Test with:
+       IndividualR { person = PersonR { lastName = "Smith", firstName = "John" } }
+       GovOrgR "ABC Org"
+       clientRName (GovOrgR "ABC Org")
+       : t duty
+  -}
   data ClientR = GovOrgR  { clientRName :: String }
                | CompanyR { clientRName :: String
                           , companyId :: Integer
@@ -38,6 +47,46 @@ module Chapter2.Section2.TimeMachine where
   data PersonR = PersonR { firstName :: String
                          , lastName :: String
                          } deriving Show
+
+  {- Records for fields to bind or match with new pattern (constructor) 
+     and list of fields and patterns 
+  -}
+  {-
+  greet :: ClientR -> String
+  greet IndividualR { person = PersonR { firstName = fn } } = "Hi " ++ fn
+  greet CompanyR    { clientRName = c }                     = "Good Day " ++ c
+  greet GovOrgR     { }                                     = "Welcome" -- empty list of fields
+  -}
+
+  {- Record Puns GHC Extension used as alternative for Record Matching 
+     Note that pragma 'NamedFieldPuns' required 
+  -}
+  {-
+  greet :: ClientR -> String 
+  greet IndividualR { person = PersonR { firstName } } = "Hi " ++ firstName
+  greet CompanyR    { clientRName }                    = "Good Day " ++ clientRName
+  greet GovOrgR     { }                                = "Welcome"
+  -}
+  
+  {- RecordWildCards GHC Extension used to automatically create bindings for all variables
+     not yet mentioned in the pattern
+  -}
+  greet IndividualR { person = PersonR { .. } } = "Hi " ++ firstName
+  greet CompanyR    { .. }                      = "Good Day " ++ clientRName
+  greet GovOrgR     { }                         = "Welcome"
+
+  {- Function to ensure a PersonR's first name always starts with capital letter
+     using Record updating. PersonR is a binding containing a value of a record type.
+  -}
+  nameInCapitals :: PersonR -> PersonR
+  -- Create exact copy of PersonR where corresponding field has been changed
+  -- Record syntax used to Pattern Match on PersonR using x:xs to match a list
+  -- 'As Pattern' used to bind the entire value to 'p' for later updating
+  -- 'Let' expression used to compute the new name and update 'p' using Record Updating syntax
+  nameInCapitals p@(PersonR { firstName = initial:rest }) = 
+          let newName = (toUpper initial):rest
+          in p { firstName = newName }
+  nameInCapitals p@(PersonR { firstName = "" }) = p
 
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
@@ -73,3 +122,5 @@ module Chapter2.Section2.TimeMachine where
   specialClient (clientName -> "Mr Schoen")    = True
   specialClient (responsibility -> "Director") = True
   specialClient _                              = False
+  
+  
