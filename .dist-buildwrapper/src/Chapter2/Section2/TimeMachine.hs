@@ -26,7 +26,12 @@ module Chapter2.Section2.TimeMachine where
   -}
 
   {- Records with set of Fields for access and updating part of the Data Structure
-     are defined using the Data Declaration -}
+     are defined using the Data Declaration. Test with:
+       IndividualR { person = PersonR { lastName = "Smith", firstName = "John" } }
+       GovOrgR "ABC Org"
+       clientRName (GovOrgR "ABC Org")
+       : t duty
+  -}
   data ClientR = GovOrgR  { clientRName :: String }
                | CompanyR { clientRName :: String
                           , companyId :: Integer
@@ -38,6 +43,14 @@ module Chapter2.Section2.TimeMachine where
   data PersonR = PersonR { firstName :: String
                          , lastName :: String
                          } deriving Show
+
+  {- Records for fields to bind or match with new pattern (constructor) 
+     and list of fields and patterns 
+  -}
+  greet :: ClientR -> String
+  greet IndividualR { person = PersonR { firstName = fn } } = "Hi " ++ fn
+  greet CompanyR    { clientRName = c }                     = "Good Day " ++ c
+  greet GovOrgR     { }                                     = "Welcome" -- empty list of fields
 
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
