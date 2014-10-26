@@ -75,6 +75,19 @@ module Chapter2.Section2.TimeMachine where
   greet CompanyR    { .. }                      = "Good Day " ++ clientRName
   greet GovOrgR     { }                         = "Welcome"
 
+  {- Function to ensure a PersonR's first name always starts with capital letter
+     using Record updating. PersonR is a binding containing a value of a record type.
+  -}
+  nameInCapitals :: PersonR -> PersonR
+  -- Create exact copy of PersonR where corresponding field has been changed
+  -- Record syntax used to Pattern Match on PersonR using x:xs to match a list
+  -- 'As Pattern' used to bind the entire value to 'p' for later updating
+  -- 'Let' expression used to compute the new name and update 'p' using Record Updating syntax
+  nameInCapitals p@(PersonR { firstName = initial:rest }) = 
+          let newName = (toUpper initial):rest
+          in p { firstName = newName }
+  nameInCapitals p@(PersonR { firstName = "" }) = p
+
   {- Alternatively Encode Pattern Matching directly in the definition -}
   clientName (GovOrg name)                              = name
   clientName (Company name _ _ _)                       = name
@@ -109,3 +122,5 @@ module Chapter2.Section2.TimeMachine where
   specialClient (clientName -> "Mr Schoen")    = True
   specialClient (responsibility -> "Director") = True
   specialClient _                              = False
+  
+  
