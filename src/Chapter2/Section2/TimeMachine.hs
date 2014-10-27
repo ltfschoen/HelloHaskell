@@ -4,6 +4,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module Chapter2.Section2.TimeMachine where
+  import Data.Char
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
      and Arguments to hold type values.
@@ -122,5 +123,3 @@ module Chapter2.Section2.TimeMachine where
   specialClient (clientName -> "Mr Schoen")    = True
   specialClient (responsibility -> "Director") = True
   specialClient _                              = False
-  
-  
