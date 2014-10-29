@@ -123,3 +123,65 @@ module Chapter2.Section2.TimeMachine where
   specialClient (clientName -> "Mr Schoen")    = True
   specialClient (responsibility -> "Director") = True
   specialClient _                              = False
+  
+{-
+  The type of the following function:
+    second xs = head (tail xs)
+-}
+  {- WRONG second :: Eq a => [a] -> a -- Type -}
+  {- RIGHT -}
+  second :: [a] -> a
+  second xs = head (tail xs)
+
+{-
+  The type of the following function:
+    swap (x, y) = (y, x)
+-} 
+  {- RIGHT -}
+  swap :: (a, b) -> (b, a)
+  swap (x, y) = (y, x)
+
+{-
+  The type of the following function:
+    pair x y = (x, y)
+-}
+  {- RIGHT -}
+  pair :: a -> b -> (a, b) -- Type
+  pair x y = (x, y)
+
+{-
+  The type of the following function:
+    double x = x * 2
+-}
+  {- WRONG double :: Int -> Int -- the Type -}
+  {- RIGHT double :: Num a => a -> a -- the Type -}
+  double :: Num a => a -> a
+  double x = x * 2
+
+{-
+  The type of the following function:
+    palindrome xs = reverse xs == xs
+-}
+  {- RIGHT -}
+  palindrome :: Eq a => [a] -> Bool
+  palindrome xs = reverse xs == xs
+ 
+{-
+  The type of the following function:
+    twice f x = f (f x)
+-}
+  {- RIGHT -}
+{-
+  twice :: (a -> a) -> a -> a
+  twice f x = f (f x)
+-}
+ 
+{-
+  The type of the following function:
+    f xs = take 3 (reverse xs)
+-}
+  {- RIGHT -}
+{-
+  f :: [a] -> [a]
+  f xs = take 3 (reverse xs)
+-}
