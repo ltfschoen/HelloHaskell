@@ -5,6 +5,8 @@
 
 module Chapter2.Section2.TimeMachine where
   import Data.Char
+  import Prelude hiding ((||))
+  import Prelude hiding ((&&))
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
      and Arguments to hold type values.
@@ -184,4 +186,195 @@ module Chapter2.Section2.TimeMachine where
 {-
   f :: [a] -> [a]
   f xs = take 3 (reverse xs)
+-}
+
+-- Select implementations that define the following function 
+-- that splits an even-length list in two halves 
+--
+--  halve :: [a] -> ([a], [a])
+{- WRONG
+  halve xs = (take n xs, drop n xs)
+    where n = length xs / 2
+-}
+{- WORKS, BUT FOR BOTH EVEN AND ODD LENGTH LISTS
+  halve xs = splitAt (length xs `div` 2) xs
+-}
+{- WORKS, BUT FOR BOTH EVEN AND ODD LENGTH LISTS
+  halve xs = (take (n `div` 2) xs, drop (n `div` 2) xs)
+    where n = length xs
+-}
+{- WRONG
+  halve xs = splitAt (length xs `div` 2)
+-}
+{- WRONG - REMOVES AN ELEMENT WHEN PROCESSED
+  halve xs = (take n xs, drop (n + 1) xs)
+    where n = length xs `div` 2
+-}
+
+-- ALTERNATIVE APPROACH TO TESTING
+-- let halve xs = (take n xs, drop (n + 1) xs) where n = length xs `div` 2
+-- halve [1 .. 10]
+
+{- WORKS, BUT FOR BOTH EVEN AND ODD LENGTH LISTS
+  halve xs = splitAt (div (length xs) 2) xs
+-}
+{- WRONG
+  halve xs = splitAt (length xs / 2) xs
+-}
+{- WORKS, BUT FOR BOTH EVEN AND ODD LENGTH LISTS
+  halve xs = (take n xs, drop n xs)
+    where n = length xs `div` 2
+-}
+{-
+  safeTail :: [a] -> [a]
+-}
+{- RIGHT
+  safeTail xs = if null xs then [] else tail xs
+-}
+{- RIGHT
+  safeTail [] = []
+  safeTail (_ : xs) = xs
+-}
+{- INVALID FOR [] AND OTHERS
+  safeTail (_ : xs)
+    | null xs = []
+    | otherwise = tail xs
+-}
+{- RIGHT
+  safeTail xs
+    | null xs = []
+    | otherwise = tail xs
+-}
+{- INVALID
+  safeTail xs = tail xs
+  safeTail [] = []
+-}
+{- RIGHT
+  safeTail [] = []
+  safeTail xs = tail xs
+-}
+{- INVALID FOR []
+  safeTail [x] = [x]
+  safeTail (_ : xs) = xs
+-}
+{- RIGHT
+  safeTail
+    = \ xs ->
+        case xs of 
+            [] -> []
+            (_ : xs) -> xs
+-}
+
+{- Which of the following definitions is correct for the logical disjunction operator || (i.e. OR)? Choose all correct implementations!
+Note: since the || operator is already defined in the Prelude, you have to hide the default implementation in order to test the following code. You can hide the operator by adding the following line to your script:
+-}
+
+{- TRUE
+  False || False = False 
+  _ || _ = True
+-}
+{- TRUE
+  False || b = b
+  True || _ = True
+-}
+{- WRONG AS NOT CORRECT FOR FALSE || FALSE WHICH == FALSE (NOT TRUE)
+  b || c
+    | b == c = True
+    | otherwise = False
+-}
+{- TRUE
+  b || c
+    | b == c = b
+    | otherwise = True
+-}
+{- TRUE
+  b || False = b
+  _ || True = True
+-}
+{- TRUE
+  b || c
+    | b == c = c
+    | otherwise = True
+-}
+{- WRONG
+  b || True = b
+  _ || True = True
+-}
+{- TRUE
+  False || False = False
+  False || True = True
+  True || False = True
+  True || True = True
+-}
+
+{- 
+Which of the following definitions is correct for the logical conjunction operator && (i.e. AND)? Choose all correct implementations!
+Note: since the && operator is already defined in the Prelude, you have to hide the default implementation in order to test the following code. You can hide the operator by adding the following line to your script:
+-}
+
+{- 
+Show how the curried function definition mult x y z = x * y * z can be understood in terms of lambda expressions.
+-}
+{- 
+ Enter in console:
+ let mult x y z = x * y * z
+ let mult = \ x -> (\ y -> (\ z -> x * y * z))
+ mult 4 6 7
+-}
+{- 
+  The expression f x g y means:
+  ((f x) g) y
+-}
+{-
+  The type signature f :: (a -> a) -> a indicates that the function f:
+  Takes a function as its argument
+-}
+{-
+  Choose the correct implementation for the function 
+  remove :: Int -> [a] -> [a] 
+  which takes a number n and a list and 
+  removes the element at position n from the list.
+  For example: remove 0 [1,2,3,4] = [2,3,4]
+-}
+{-
+  remove :: Int -> [a] -> [a] 
+-}
+{- WRONG - DOES NOT REMOVE
+  remove n xs = take n xs ++ drop n xs
+-}
+{- WRONG
+  remove n xs = drop n xs ++ take n xs
+-}
+{- WRONG
+  remove n xs = take (n + 1) xs ++ drop n xs
+-}
+{- RIGHT
+  remove n xs = take n xs ++ drop (n + 1) xs
+-}
+
+{- What is the output of the function call: 
+   funct 3 [1, 2, 3, 4, 5, 6, 7]? 
+   The function funct is defined as:
+   funct :: Int -> [a] -> [a]
+   funct x xs = take (x + 1) xs ++ drop x xs
+   
+   ANS: [1,2,3,4,4,5,6,7]
+-}
+{-
+  funct :: Int -> [a] -> [a]
+  funct x xs = take (x + 1) xs ++ drop x xs
+-}
+{-
+  What is the type of the following definition:
+  e3 x = x * 2
+  Enter the following in GHCi
+  let e3 x = x * 2
+  :t e3
+-}
+{-
+  Choose a suitable definition for the following type:
+  e11 :: (Char, Bool)
+  Enter the following in GHCi
+  :t '\a'
+  returns '\a' :: Char
 -}
