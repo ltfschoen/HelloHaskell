@@ -431,24 +431,31 @@ Show how the curried function definition mult x y z = x * y * z can be understoo
   factors n = let prime = head $ dropWhile ((/= 0) . mod n) [2 .. n]
             in (prime :) $ factors $ div n prime
 -}
+{- TEXTBOOK
+  factors   :: Int -> [Int]
+  factors n = [x | x <- [1..n], n `mod` x == 0]
+-}
 {-           
   factors 1 = []
   factors n = let divisors = dropWhile ((/= 0) . mod n) [2 .. ceiling $ sqrt $ fromIntegral n]
            in let prime = if null divisors then n else head divisors
               in (prime :) $ factors $ div n prime
 -}   
-{- RIGHT
+{- WRONG
   -- returns [2,3,4,5,7,11,13,17,19,23,29,31,37,41,43,47,...
+  -- COURSE VERSION returns [1]
   perfects n = [x | x <- [1 .. n], isPerfect x]
     where isPerfect num = sum (factors num) == num
 -}
-{- WRONG
+{- RIGHT
   -- [*** Exception: Prelude.init: empty list
+  -- COURSE VERSION [6,28,496]
   perfects n = [x | x <- [1 .. n], isPerfect x] 
     where isPerfect num = sum (init (factors num)) == num
 -}
 {- WRONG
   -- [*** Exception: Prelude.init: empty list
+  -- COURSE VERSION [False,False,False,False,False,True,False
   perfects n = [isPerfect x | x <- [1 .. n]]
     where isPerfect num = sum (init (factors num)) == num
 -}
@@ -477,14 +484,85 @@ Show how the curried function definition mult x y z = x * y * z can be understoo
   Prelude> [z | z <- [[(x,y) | y <- [4,5,6]] | x <- [1,2,3]]]
     [[(1,4),(1,5),(1,6)],[(2,4),(2,5),(2,6)],[(3,4),(3,5),(3,6)]]
 -}
-
 {-
+  -- positions 0 [1,0,1,0]
+  -- returns: [1,3]
+
   find :: (Eq a) => a -> [(a, b)] -> [b]
   find k t = [v | (k', v) <- t, k == k']
 
   positions :: (Eq a) => a -> [a] -> [Int]
-  positions x xs =
+-}
+{- RIGHT
+  positions x xs = find x (zip xs [0..n])
+    where n = length xs - 1
+-}
+{-
+  positions x xs = find x xs
+-}
+{-
+  positions x xs = find x (zipWith (+) xs [0..n])
+    where n = length xs - 1
+-}
+{-
+  positions x xs = find n (zip xs [0..x])
+    where n = length xs - 1
+-}
+{-
     [i | (x', i) <- zip xs [0..n], x == x']
     where n = length xs
 -}
+{- 
+  -- test with: scalarproduct [1, 2, 3] [4, 5, 6]
+  -- result: 32
+  scalarproduct :: [ Int ] -> [ Int ] -> Int
+  -- scalarproduct xs ys = sum [x * y | x <- xs, y <- ys]
+  scalarproduct xs ys = sum [x * y | (x, y) <- xs `zip` ys]
+  -- scalarproduct xs ys = product (zipWith (+) xs ys)
+  -- scalarproduct xs ys = sum (product [(x, y) | x <- xs, y <- ys])
+-}
+{- 
+  Caesar cipher program
+  modified to handle uppercase letters
+  test with shift size 13: encode 13 "Think like a Fundamentalist Code like a Hacker"
+-}
+{-
+  let2int :: Char -> Int
+  let2int c = ord c - ord 'a'
+
+  int2let :: Int -> Char
+  int2let n = chr (ord 'a' + n)
+
+  shift :: Int -> Char -> Char
+  shift n c 
+    | isLower c = int2let ((let2int c + n) `mod` 26)
+    | otherwise = c
+
+  encode :: Int -> String -> String
+  encode n xs = [shift n x | x <- xs]
+-}
+
+{-
+  Choose the correct definition of the function
+  riffle :: [a] -> [a] -> [a] that takes two lists 
+  of the same length and interleaves their elements 
+  in turn about order.
+  Test with: riffle [1,2,3][4,5,6] 
+  Expected output: [1,4,2,5,3,6]
+-}
+  riffle :: [a] -> [a] -> [a]
+  riffle xs ys = concat [[x,y] | (x,y) <- xs `zip` ys]
   
+ {-
+   Choose the correct definition for the function
+   divisors :: Int -> [Int] that returns the divisors
+   of a natural number.
+   Test with: divisors 15
+   Expected output: [1, 3, 5, 15]
+   The function divides :: Int -> Int -> Bool decides
+   if one integer is divisible by another. 
+   (Note: You need to implement this function yourself.)
+   Example: 
+   divides 15 2 = False
+   divides 15 3 = True
+ -}
