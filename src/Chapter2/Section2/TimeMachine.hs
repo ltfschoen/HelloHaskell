@@ -378,3 +378,113 @@ Show how the curried function definition mult x y z = x * y * z can be understoo
   :t '\a'
   returns '\a' :: Char
 -}
+{-
+  Choose a suitable definition for the following type:
+  e13 :: Int -> Int -> Int
+  Enter the following in GHCi
+  let el3 x y = x + y * y
+  :t el3
+  returns el3 :: Num a => a -> a -> a
+-}
+{- :t sum [x ^ 2 | x <- [1 .. 100]]
+  sum [x ^ 2 | x <- [1 .. 100]] :: (Num a, Enum a) => a
+  
+  let sum100 = sum [x ^ 2 | x <- [1 .. 100]]
+  sum100
+-}
+{-
+  let replicate n a = [a | _ <- [1..n]]
+  replicate 6 False
+  [False,False,False,False,False,False]
+-}
+{- WRONG
+  pyths n
+    = [(x, y, z) | x <- [1 .. n], y <- [1 .. x], z <- [1 .. y], 
+       x ^ 2 + y ^ 2 == z ^ 2]
+-}
+{- WRONG
+  pyths n
+    = [(x, y, z) | x <- [1 .. n], y <- [x .. n], z <- [y .. n], 
+       x ^ 2 + y ^ 2 == z ^ 2]
+  returns: [(3,4,5),(6,8,10)]
+-}
+{- RIGHT
+  A triple (x, y, z) of positive integers is pythagorean if x2+y2=z2. 
+  Choose the correct implementation for the function 
+  pyths :: Int -> [(Int, Int, Int)] that returns the list of all 
+  pythagorean triples whose components are at most a given limit.
+  
+  pyths n
+    = [(x, y, z) | x <- [1 .. n], y <- [1 .. n], z <- [1 .. n], 
+       x ^ 2 + y ^ 2 == z ^ 2]  
+  returns: [(3,4,5),(4,3,5),(6,8,10),(8,6,10)]
+-}
+{- WRONG
+  pyths n = [(x, y, (x ^ 2 + y ^ 2)) | x <- [1 .. n], y <- [1 .. n]]
+  returns: [(1,1,2),(1,2,5),(1,3,10),(1,4,17),(1,5,26),(1,6,37),(1,7,50),(1,8,65), ...
+-}
+{-
+  factors :: Integer -> [Integer]
+-}
+{-
+  factors 1 = []
+  factors n = let prime = head $ dropWhile ((/= 0) . mod n) [2 .. n]
+            in (prime :) $ factors $ div n prime
+-}
+{-           
+  factors 1 = []
+  factors n = let divisors = dropWhile ((/= 0) . mod n) [2 .. ceiling $ sqrt $ fromIntegral n]
+           in let prime = if null divisors then n else head divisors
+              in (prime :) $ factors $ div n prime
+-}   
+{- RIGHT
+  -- returns [2,3,4,5,7,11,13,17,19,23,29,31,37,41,43,47,...
+  perfects n = [x | x <- [1 .. n], isPerfect x]
+    where isPerfect num = sum (factors num) == num
+-}
+{- WRONG
+  -- [*** Exception: Prelude.init: empty list
+  perfects n = [x | x <- [1 .. n], isPerfect x] 
+    where isPerfect num = sum (init (factors num)) == num
+-}
+{- WRONG
+  -- [*** Exception: Prelude.init: empty list
+  perfects n = [isPerfect x | x <- [1 .. n]]
+    where isPerfect num = sum (init (factors num)) == num
+-}
+{- WRONG
+  -- Couldn't match expected type ‘[Integer]’ with actual type ‘Integer’
+  -- In the second argument of ‘(==)’, namely ‘num’
+  -- In the expression: init (factors num) == num
+  perfects n = [x | x <- [1 .. n], isPerfect x]
+    where isPerfect num = init (factors num) == num
+-}
+{-
+  The following list comprehension: [(x,y) | x <- [1,2,3], y <- [4,5,6]]
+  can be re-expressed using two or more comprehensions with single generators. 
+  Choose the implementation that is equivalent to the one above.
+ 
+  Prelude> :t concat
+    concat :: [[a]] -> [a]
+  Prelude> [(x,y) | x <- [1,2,3], y <- [4,5,6]]
+    [(1,4),(1,5),(1,6),(2,4),(2,5),(2,6),(3,4),(3,5),(3,6)]
+  Prelude> concat [[[(x,y)] | x <- [1,2,3]] | y <- [4,5,6]]
+    [[(1,4)],[(2,4)],[(3,4)],[(1,5)],[(2,5)],[(3,5)],[(1,6)],[(2,6)],[(3,6)]]
+  Prelude> concat [(x,y) | y <- [4,5,6]] | x <- [1,2,3]
+    <interactive>:238:31: parse error on input ‘|’
+  Prelude> concat [[(x,y) | y <- [4,5,6]] | x <- [1,2,3]]
+    [(1,4),(1,5),(1,6),(2,4),(2,5),(2,6),(3,4),(3,5),(3,6)]
+  Prelude> [z | z <- [[(x,y) | y <- [4,5,6]] | x <- [1,2,3]]]
+    [[(1,4),(1,5),(1,6)],[(2,4),(2,5),(2,6)],[(3,4),(3,5),(3,6)]]
+-}
+
+{-
+  find :: (Eq a) => a -> [(a, b)] -> [b]
+  find k t = [v | (k', v) <- t, k == k']
+
+  positions :: (Eq a) => a -> [a] -> [Int]
+  positions x xs =
+    [i | (x', i) <- zip xs [0..n], x == x']
+    where n = length xs
+-}
+  
