@@ -2,11 +2,15 @@
 {-# LANGUAGE ViewPatterns #-}
 {-# LANGUAGE NamedFieldPuns #-}
 {-# LANGUAGE RecordWildCards #-}
+-- http://stackoverflow.com/questions/16430025/ambiguous-occurrence
+--{-# LANGUAGE NoImplicitPrelude #-}
 
 module Chapter2.Section2.TimeMachine where
   import Data.Char
   import Prelude hiding ((||))
   import Prelude hiding ((&&))
+  --import Prelude hiding ((^))
+  -- import qualified Prelude as P
   {- Declare Algebraic Data Type (ADT) representations 
      for 'Client' and 'Person' with Set of Constructors 
      and Arguments to hold type values.
@@ -550,10 +554,11 @@ Show how the curried function definition mult x y z = x * y * z can be understoo
   Test with: riffle [1,2,3][4,5,6] 
   Expected output: [1,4,2,5,3,6]
 -}
+{-
   riffle :: [a] -> [a] -> [a]
   riffle xs ys = concat [[x,y] | (x,y) <- xs `zip` ys]
-  
- {-
+-}
+{-
    Choose the correct definition for the function
    divisors :: Int -> [Int] that returns the divisors
    of a natural number.
@@ -565,4 +570,4 @@ Show how the curried function definition mult x y z = x * y * z can be understoo
    Example: 
    divides 15 2 = False
    divides 15 3 = True
- -}
+-}
