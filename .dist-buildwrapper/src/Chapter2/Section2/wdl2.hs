@@ -4,9 +4,38 @@ module Lab2 where
 -- Lab 2: Validating Credit Card Numbers
 ------------------------------------------------------------------------------------------------------------------------------
 
+{- Example:
+     Ex 0 - Given: 
+              4012888888881881
+     Ex 1 - Reverse the list of digits to start with the rightmost digit:
+              [1,8,8,1,8,8,8,8,8,8,8,8,2,1,0,4]
+     Ex 2 - Double every second digit:
+              [1,16,8,2,8,16,8,16,8,16,8,16,2,2,0,8]
+     Ex 3 - Split each element into individual digits (i.e. 16 becomes [1,6]), then sum all the digits:
+              [1,[1,6],8,2,8,[1,6],8,[1,6],8,[1,6],8,[1,6],2,2,0,8]
+              90
+     Ex 4 - Calculate the modulus of Ex 3 result (i.e. modulus of 90 over 10)
+              90 % 10
+              0
+     Ex 5 - Report whether valid credt card number. Valid is result of 0.
+              True
+-}
+
 -- ===================================
 -- Ex. 0
 -- ===================================
+
+-- PSEUDO CODE
+-- Find the digits of a number by defining a Function
+-- that takes n :: Integer where n >= 0
+-- returns list of digits of n
+-- should satisfy properties:
+--   eval (toDigits n) == n
+--   all (\d -> d >= 0 && d < 10) (toDigits n)
+-- where:
+--   eval xs = foldl (\x y -> y + (10 * x)) 0 xs
+-- where:
+--   toDigits n results in error for n < 0
 
 toDigits :: Integer -> [Integer]
 toDigits = undefined
@@ -15,12 +44,31 @@ toDigits = undefined
 -- Ex. 1
 -- ===================================
 
+-- PSEUDO CODE
+-- Reverse the digits of a number by defining a Function
+-- that takes n :: Integer where n >= 0 and
+-- returns a List of the digits of n in reverse order
+-- where satisfies properties:
+--   evalRev(toDigitsRev n) == n
+--   all (\d -> d >= 0 && d < 10) (toDigitsRev n) 
+-- where:
+--   evalRev xs = foldr (\x y -> x + (10 * y)) 0 xs
+-- where:
+--   toDigitsRev n results in error for n < 0
+
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev = undefined
 
 -- ===================================
 -- Ex. 2
 -- ===================================
+
+-- Algorithm should double the value of every second digit beginning with the rightmost
+
+-- PSEUDO CODE
+-- defining a Function doubleSecond :: [Integer] -> [Integer]
+-- that doubles every second number in the input List
+-- (i.e. [8, 7, 6, 5] becomes [8, 14, 6, 10])
 
 doubleSecond :: [Integer] -> [Integer]
 doubleSecond = undefined
@@ -29,6 +77,13 @@ doubleSecond = undefined
 -- Ex. 3
 -- ===================================
 
+-- Algorithm should add the digits of the doubled values and the undoubled digits from the original number
+
+-- PSEUDO CODE
+-- define a Function that takes the mixture of elements with both one and multiple-digit numbers,
+-- and breaks them into separate digits to calculate the sum of all individual digits 
+-- (i.e. sumDigits [8,14,6,10] = 8 + (1 + 4) + 6 + (1 + 0) = 20)
+
 sumDigits :: [Integer] -> Integer
 sumDigits = undefined
 
@@ -36,6 +91,13 @@ sumDigits = undefined
 -- ===================================
 -- Ex. 4
 -- ===================================
+
+-- Algorithm should calculate the modulus of the sum divided by 10 and report valid 
+-- number if result equals 0
+
+-- PSEUDO CODE
+-- define a Function that tells whether any input n :: Integer where n >= 0 could be a
+-- a valid credit card number using Functions defined in previous exercises Ex 1 to 3 
 
 isValid :: Integer -> Bool
 isValid = undefined
