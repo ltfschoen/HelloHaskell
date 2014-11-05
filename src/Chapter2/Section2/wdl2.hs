@@ -25,12 +25,36 @@ module Lab2 where
 -- Ex. 0
 -- ===================================
 
+-- PSEUDO CODE
+-- Find the digits of a number by defining a Function
+-- that takes n :: Integer where n >= 0
+-- returns list of digits of n
+-- should satisfy properties:
+--   eval (toDigits n) == n
+--   all (\d -> d >= 0 && d < 10) (toDigits n)
+-- where:
+--   eval xs = foldl (\x y -> y + (10 * x)) 0 xs
+-- where:
+--   toDigits n results in error for n < 0
+
 toDigits :: Integer -> [Integer]
 toDigits = undefined
 
 -- ===================================
 -- Ex. 1
 -- ===================================
+
+-- PSEUDO CODE
+-- Reverse the digits of a number by defining a Function
+-- that takes n :: Integer where n >= 0 and
+-- returns a List of the digits of n in reverse order
+-- where satisfies properties:
+--   evalRev(toDigitsRev n) == n
+--   all (\d -> d >= 0 && d < 10) (toDigitsRev n) 
+-- where:
+--   evalRev xs = foldr (\x y -> x + (10 * y)) 0 xs
+-- where:
+--   toDigitsRev n results in error for n < 0
 
 toDigitsRev :: Integer -> [Integer]
 toDigitsRev = undefined
@@ -40,6 +64,12 @@ toDigitsRev = undefined
 -- ===================================
 
 -- Algorithm should double the value of every second digit beginning with the rightmost
+
+-- PSEUDO CODE
+-- defining a Function doubleSecond :: [Integer] -> [Integer]
+-- that doubles every second number in the input List
+-- (i.e. [8, 7, 6, 5] becomes [8, 14, 6, 10])
+
 doubleSecond :: [Integer] -> [Integer]
 doubleSecond = undefined
 
@@ -48,6 +78,12 @@ doubleSecond = undefined
 -- ===================================
 
 -- Algorithm should add the digits of the doubled values and the undoubled digits from the original number
+
+-- PSEUDO CODE
+-- define a Function that takes the mixture of elements with both one and multiple-digit numbers,
+-- and breaks them into separate digits to calculate the sum of all individual digits 
+-- (i.e. sumDigits [8,14,6,10] = 8 + (1 + 4) + 6 + (1 + 0) = 20)
+
 sumDigits :: [Integer] -> Integer
 sumDigits = undefined
 
@@ -56,7 +92,13 @@ sumDigits = undefined
 -- Ex. 4
 -- ===================================
 
--- Algorithm should calculate the modulus of the sum divided by 10 and report valid number if result equals 0
+-- Algorithm should calculate the modulus of the sum divided by 10 and report valid 
+-- number if result equals 0
+
+-- PSEUDO CODE
+-- define a Function that tells whether any input n :: Integer where n >= 0 could be a
+-- a valid credit card number using Functions defined in previous exercises Ex 1 to 3 
+
 isValid :: Integer -> Bool
 isValid = undefined
 
