@@ -11,3 +11,13 @@ executable HelloHaskell
   ghc-options:     -Wall
   other-modules:   Chapter2.Section2.SimpleFunctions
 
+executable QuickCheck
+  build-depends:   
+                   base >= 4,
+                   QuickCheck >=2.6 && <2.7,
+                   ghc >=7.8.3 && <7.9
+  hs-source-dirs:  src
+  ghc-options:     -Wall -rtsopts
+  other-modules:   Chapter2.Section2.QuickSpec
+  main-is:         Chapter2/Section2/QuickSpec.hs
+
