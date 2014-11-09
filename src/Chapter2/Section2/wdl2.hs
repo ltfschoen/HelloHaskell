@@ -1,4 +1,6 @@
 module Lab2 where
+  -- import Data.Array
+  -- import Data.List.Split
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- Lab 2: Validating Credit Card Numbers
@@ -37,8 +39,32 @@ module Lab2 where
 -- where:
 --   toDigits n results in error for n < 0
 
-toDigits :: Integer -> [Integer]
-toDigits = undefined
+  toDigits   :: Integer -> [Integer]
+  -- toDigits = undefined
+
+-- ANSWER ATTEMPT #1
+{-
+toDigits n = if n >= 0 && n < 10
+             then [0..n] -- similar to zeroto example
+             else [] -- how to hard code error?
+-}
+ 
+-- ANSWER ATTEMPT #2 onwards
+-- toDigits n = [x | x <- [1..n], all (\n -> n >= 0 && n < 10) (toDigits n)] -- similar to factors example 
+-- toDigits n = [x | x <- [1..n], n >= 0 && n < 10]
+-- let toDigits n = listArray (0, length n - 1) n
+-- toDigits [3,6]
+-- toDigits n = listArray (0, length n - 1) n -- import Data.Array
+  toDigits n = [x | x <- [1..n], n >= 0 && n < 10]
+-- toDigits n | n >= 0 && n < 10 = [0..n]
+-- toDigits n = [x | x <- splitOn ",", n >= 0 && n < 10]
+-- toDigits n = [x | x <- [n], n >= 0 && n < 10]
+-- toDigits n = [x | x <- n mod 10, n mod 10 > 0]
+--  toDigits n = if n < 0 || n > 100000000000000
+--               then []
+--               else toDigits (n `mod` 10)
+
+
 
 -- ===================================
 -- Ex. 1
@@ -56,8 +82,8 @@ toDigits = undefined
 -- where:
 --   toDigitsRev n results in error for n < 0
 
-toDigitsRev :: Integer -> [Integer]
-toDigitsRev = undefined
+  toDigitsRev :: Integer -> [Integer]
+  toDigitsRev = undefined
 
 -- ===================================
 -- Ex. 2
@@ -70,8 +96,8 @@ toDigitsRev = undefined
 -- that doubles every second number in the input List
 -- (i.e. [8, 7, 6, 5] becomes [8, 14, 6, 10])
 
-doubleSecond :: [Integer] -> [Integer]
-doubleSecond = undefined
+  doubleSecond :: [Integer] -> [Integer]
+  doubleSecond = undefined
 
 -- ===================================
 -- Ex. 3
@@ -84,8 +110,8 @@ doubleSecond = undefined
 -- and breaks them into separate digits to calculate the sum of all individual digits 
 -- (i.e. sumDigits [8,14,6,10] = 8 + (1 + 4) + 6 + (1 + 0) = 20)
 
-sumDigits :: [Integer] -> Integer
-sumDigits = undefined
+  sumDigits :: [Integer] -> Integer
+  sumDigits = undefined
 
 
 -- ===================================
@@ -99,20 +125,20 @@ sumDigits = undefined
 -- define a Function that tells whether any input n :: Integer where n >= 0 could be a
 -- a valid credit card number using Functions defined in previous exercises Ex 1 to 3 
 
-isValid :: Integer -> Bool
-isValid = undefined
+  isValid :: Integer -> Bool
+  isValid = undefined
 
 
 -- ===================================
 -- Ex. 5
 -- ===================================
     
-numValid :: [Integer] -> Integer
-numValid xs = sum . map (\_ -> 1) $ filter isValid xs
+  numValid :: [Integer] -> Integer
+  numValid xs = sum . map (\_ -> 1) $ filter isValid xs
 
 
-creditcards :: [Integer]
-creditcards = [ 4716347184862961,
+  creditcards :: [Integer]
+  creditcards = [ 4716347184862961,
                 4532899082537349,
                 4485429517622493,
                 4320635998241421,
@@ -232,5 +258,5 @@ creditcards = [ 4716347184862961,
                 345835454524671,
                 377851536227201,
                 345763240913232
-              ]
+                ]
 
