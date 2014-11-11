@@ -1,6 +1,6 @@
 module HighOrder where
   import Prelude hiding (
-    all, dropWhile, takeWhile, any, mapM, fmap, max, curry, uncurry)
+    all, dropWhile, takeWhile, any, mapM, fmap, max, curry, uncurry, iterate)
   -- DON'T UNDERSTAND!!!
   -- Test with 'all even [1,2,3,4]' -- expect return False
   -- Test with 'all odd [1,3,7]' -- expect return True
@@ -222,14 +222,53 @@ module HighOrder where
   -- WRONG uncurry f = \ x y -> f (x, y)
   -- WRONG uncurry f = \ (x, y) -> f 
   -- WRONG uncurry f = \ x y -> f 
+
   {-
-  int2bin :: Int -> [Int]
-  int2bin 0 = []
-  int2bin n = n `mod` 2 : int2bin (n `div` 2)
-  -}
   int2list :: Int -> [Int]
   int2list 0 = []
   int2list n = n `mod` 10 : int2list (n `div` 10)
- 
+  -}
   
+  {-
+  -- test with: int2bin 0 --> []
+  -- test with: int2bin (-0) --> []  
+  type Bit = Int
+  int2bin :: Int -> [Bit]
+  int2bin 0 = []
+  int2bin n = n `mod` 2 : int2bin (n `div` 2)
+  -}
   
+  unfold :: (b -> Bool) -> (b -> a) -> (b -> b) -> b -> [a]
+  unfold p h t x
+    | p x = []
+    | otherwise = h x : unfold p h t (t x)
+  
+  -- int2bin = unfold (==0) (`mod` 2) (`div` 2)
+  
+  {-
+  type Bit = Int
+  chop8 :: [Bit] -> [[Bit]]
+  -}
+  -- test with: chop8 [1,1,1,1,1,1,0,0,0,0,0,1,1,1]
+  -- returns: [[1,1,1,1,1,1,0,0],[0,0,0,1,1,1]]
+  {-
+  chop8 [] = []
+  chop8 bits = take 8 bits : chop8 (drop 8 bits)
+  -}
+  -- WRONG chop8 = unfold [] (drop 8) (take 8)
+  -- RIGHT chop8 = unfold null (take 8) (drop 8)
+  -- WRONG chop8 = unfold null (drop 8) (take 8)
+  -- WRONG chop8 = unfold (const False) (take 8) (drop 8)
+  
+  -- map :: (a -> b) -> [a] -> [b]
+  -- WRONG map f = unfold null (f) tail
+  -- WRONG map f = unfold null (f (head)) tail
+  -- RIGHT map f = unfold null (f . head) tail
+  -- WRONG map f = unfold empty (f . head) tail
+  
+  -- test with: iterate (*2) 1
+  -- iterate :: (a -> a) -> a -> [a]
+  -- RIGHT iterate f = unfold (const False) id f
+  -- WRONG iterate f = unfold (const False) f f
+  -- WRONG iterate f = unfold (const True) id f
+  -- WRONG iterate f = unfold (const True) f f
