@@ -163,6 +163,8 @@ module Parsing where
     combinators would result in a program that doesn't terminate
     To overcome this, choose an iterative implementation of 
     left-associative expressions 
+    Test: parse expr "1-2-3-5"
+    Returns: [(-9,"")]
   -}
   expr                          :: Parser Int
   {- RIGHT -}
