@@ -7,6 +7,10 @@ module Parsing where
 
 {- The monad of parsers -}
 
+  {- newtype instead of just a type-synonym are wrapped inside
+     the data-constructor P as it has to be this way to define
+     a monad instance
+  -}
   newtype Parser a              =  P (String -> [(a,String)])
 
   {- Note: Implement this bind (>>=) method so that it is not undefined,
@@ -18,6 +22,7 @@ module Parsing where
   -}
 
   instance Monad Parser where
+     {- Note: New versions of GHC reject signatures included here -}
      -- return                  :: a -> Parser a
      return v                   =  P (\inp -> [(v,inp)])
      
@@ -84,7 +89,12 @@ module Parsing where
   alphanum                      :: Parser Char
   alphanum                      =  sat isAlphaNum
 
-  -- Test: char 'a' +++ return 'b'
+  {- Test:
+       let test = char 'a' +++ return 'b'
+       parse test "yourTestStringHere"
+     Returns:
+       [('b',"yourTestStringHere")]
+  -}
   -- Note: It always succeeds (DOES NOT always succeed with the result value of 'a')
 
   char                          :: Char -> Parser Char
@@ -109,23 +119,53 @@ module Parsing where
                                       xs <- many alphanum
                                       return (x:xs)
 
+  {- 
+    Parses a sequence of one or more digits 
+  -}
   nat                           :: Parser Int
   nat                           =  do xs <- many1 digit
                                       return (read xs)
-                                   
+  {- 
+    Parses an integer literal consists of an optional minus sign, 
+    followed by a sequence of one or more digits.
+    Testing: parse int "-007"
+    Result: [(-7,"")] (according to the spec)     
+  -}                            
   int                           :: Parser Int
-  int                           =  undefined
+  int                           =  (do char '-'
+                                       n <- nat
+                                       return (-n))
+                                     +++ nat
 
   space                         :: Parser ()
   space                         =  do many (sat isSpace)
                                       return ()
-
+  {- 
+    Parser definition for ordinary Haskell-like comments
+    that begin with the symbol -- and extend to end of 
+    current line represented by control character '\n'.
+    Note that /= is syntax for "not equals"
+  -}
   comment                       :: Parser ()
   {- RIGHT -}
   comment                       =  do string "--"
                                       many (sat (/= '\n'))
                                       return ()
-
+  {- 
+    Consider expressions built up from non-negative numbers, 
+    greater or equal to zero using a subtraction operator
+    that associates to the left, where a possible grammar of 
+    such expressions would appear as follows:
+      exp ::= expr - nat | nat
+      nat ::= 0 | 1 | 2 |...
+    Note however that this grammar is left-recursive so
+    direct transliteration of this grammar into parser 
+    combinators would result in a program that doesn't terminate
+    To overcome this, choose an iterative implementation of 
+    left-associative expressions 
+    Test: parse expr "1-2-3-5"
+    Returns: [(-9,"")]
+  -}
   expr                          :: Parser Int
   {- RIGHT -}
   expr                          = do n <- natural
