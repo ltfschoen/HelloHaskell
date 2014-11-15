@@ -272,3 +272,5 @@ module HighOrder where
   -- WRONG iterate f = unfold (const False) f f
   -- WRONG iterate f = unfold (const True) id f
   -- WRONG iterate f = unfold (const True) f f
+  
+  let myfold = myfoldr (-) 0 [1, 2, 3, 4]
