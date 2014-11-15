@@ -9,9 +9,23 @@ module Parsing where
 
   newtype Parser a              =  P (String -> [(a,String)])
 
+  {- Note: Implement this bind (>>=) method so that it is not undefined,
+     so that any parser that requires the bind function will work.
+     When this is implemented the Console will display *Parsing> as it
+     has performed: Prelude> :load
+     Test with:     *Parsing> parse (digit) "123"
+     Returns:       [('1',"23")]
+  -}
+
   instance Monad Parser where
+     -- return                  :: a -> Parser a
      return v                   =  P (\inp -> [(v,inp)])
-     p >>= f                    =  undefined
+     
+     -- (>>=)                   :: Parser a -> (a -> Parser b) -> Parser b
+     p >>= f                    =  P (\ inp ->
+                                        case parse p inp of
+                                            [(v, out)] -> parse (f v) out
+                                            [] -> [])
 
   instance MonadPlus Parser where
      mzero                      =  P (\inp -> [])
