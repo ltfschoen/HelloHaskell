@@ -128,3 +128,17 @@ module Lab3 where
   coords :: Integer -> Integer -> [(Integer,Integer)]
   coords m n = [(x,y) | x <- [0..m],
                         y <- [0..n]]
+
+
+  {- 
+    After watching the jam session about Church Numerals, 
+    what could be a possible implementation for exponentiation? 
+  -}
+  
+  -- cExp :: CNat -> CNat -> CNat
+  
+  -- cExp (CNat a) (CNat b) = CNat (a ^ b)
+  -- cExp (CNat a) (CNat b) = CNat (a b)
+  -- cExp (CNat a) (CNat b) = CNat (b a)
+  -- cExp (CNat a) (CNat b) = CNat (a . b)        
+      
