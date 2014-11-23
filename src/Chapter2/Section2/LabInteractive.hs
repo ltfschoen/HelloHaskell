@@ -423,6 +423,16 @@ module Chapter2.Section2.LabInteractive where
        
      Expect: 
        ["b32","b31","a32","a31"]
+       
+     Also test with:
+       mapM' (putChar) ['a', 'b', 'c']
+     Gives: 
+       abc[(),(),()]
+       
+     Also test with:
+       mapM' (\x -> putChar x >> return x) ['a', 'b', 'c']
+     Gives: 
+       abc"abc"
   -}  
   
   mapM' :: Monad m => (a -> m b) -> [a] -> m [b]
@@ -575,16 +585,27 @@ module Chapter2.Section2.LabInteractive where
           [1,3,5,7,9][9,7,5,3,1] 
           [1,3,5,7,9][1,3,5,7,9]
         
+        Note: A simple test like the following won't reveal the flaw in the code
+          foldLeftM (\a b -> Just (a + b)) 0 [1..10]
+          
+        Proper test in GHCi
+          foldRightM' (\a b -> putChar a >> return (a : b)) [] (show [1,3..10]) >>= \r -> putStrLn r
+        
+        Returns: 
+          ]9,7,5,3,1[[1,3,5,7,9]
   -}
   
   foldRightM' :: Monad m => (a -> b -> m b) -> b -> [a] -> m b
   
+  -- carefully compare with the implementation of foldr
   -- foldRightM' |operator| |init_value| |list|
+  -- Note: the code must be associating to the right and implementing the right fold correctly
   foldRightM' f d []     = return d
   foldRightM' f d (x:xs) = (\z -> f x z) <<= foldRightM' f d xs
     where (<<=) = flip (>>=)
+
   
-  --foldRightM' (\a b -> putChar a >> return (a : b)) [] (show [1,3..10]) >>= \r -> putStrLn r
+  --
   
   {- Ex. 11
      Choose all possible implementations that define a function 
