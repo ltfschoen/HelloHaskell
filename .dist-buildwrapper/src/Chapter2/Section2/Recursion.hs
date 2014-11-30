@@ -223,7 +223,8 @@ module Chapter2.Section2.Recursion where
   -}
   halve :: [a] -> ([a], [a])
   halve xs = splitAt (length xs `div` 2) xs
-  msort :: Ord a => [a] -> [a]
+  
+  --msort :: Ord a => [a] -> [a]
   
   {- WRONG freezes on msort [3,2,90,54,1]
   msort [] = []
